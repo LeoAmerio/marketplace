@@ -4,9 +4,22 @@ import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
 import { ArrowRight } from "lucide-react"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
+import api from "@/lib/api"
+
+async function getTemplates() {
+  try {
+    const response = await api.get("/templates")
+    return response.data
+  } catch (error) {
+    console.error("Error fetching templates:", error)
+    return []
+  }
+}
 
 export default async function Home() {
   const supabase = await createServerComponentClient({ cookies }, { supabaseUrl: "https://qfrykomckfnnbrjisfqj.supabase.co", supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmcnlrb21ja2ZubmJyamlzZnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNTYxNjAsImV4cCI6MjA1NzgzMjE2MH0.-C6hY6haFUkSMJzCV849xxsqtb948sDpLI8zKH94wZs" })
+  const templates2 = await getTemplates()
+  console.log('templates 2', templates2)
 
   // Fetch templates from Supabase
   const { data: templates, error } = await supabase
@@ -14,6 +27,7 @@ export default async function Home() {
     .select("*")
     .eq("enabled", true)
     .order("created_at", { ascending: false })
+  console.log('templates supa', templates)
 
   // If there's an error or no templates, show some defaults
   const displayTemplates = templates || [

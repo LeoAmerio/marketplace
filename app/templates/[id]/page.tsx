@@ -6,13 +6,26 @@ import { ShoppingCart } from "lucide-react"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
+import api from "@/lib/api"
+
+async function getTemplate(id: string) {
+  try {
+    const response = await api.get(`/templates/${id}`)
+    return response.data
+  } catch (error) {
+    console.error(`Error fetching template ${id}:`, error)
+    return null
+  }
+}
 
 export default async function TemplatePage({ params }: { params: { id: string } }) {
   const supabase = await createServerComponentClient({ cookies }, { supabaseUrl: "https://qfrykomckfnnbrjisfqj.supabase.co", supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmcnlrb21ja2ZubmJyamlzZnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNTYxNjAsImV4cCI6MjA1NzgzMjE2MH0.-C6hY6haFUkSMJzCV849xxsqtb948sDpLI8zKH94wZs" })
+  const template2 = await getTemplate(params.id)
 
   // Fetch template from Supabase
   const { data: template, error } = await supabase.from("templates").select("*").eq("id", params.id).single()
-
+  console.log('template 2', template2)
+  console.log('template supa', template)
   // If template not found, show 404
   if (error || !template) {
     notFound()

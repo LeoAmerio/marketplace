@@ -6,7 +6,7 @@ import { Mountain, ShoppingCart } from "lucide-react"
 import { UserNav } from "@/components/user-nav"
 import "./globals.css"
 import { Toaster } from 'sonner'
-import { ThemeProvider } from "next-themes"
+import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "./auth-providers"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -22,9 +22,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
           <AuthProvider>
             <div className="flex min-h-screen flex-col">
               <header className="border-b">
@@ -122,7 +127,7 @@ export default function RootLayout({
                     </div>
                   </div>
                   <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-                    <p>© {new Date().getFullYear()} NotionMarket. All rights reserved.</p>
+                    {/* <p>© {new Date().getFullYear()} NotionMarket. All rights reserved.</p> */}
                   </div>
                 </div>
               </footer>
